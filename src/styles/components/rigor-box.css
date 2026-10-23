@@ -1,0 +1,207 @@
+.rigor-box {
+  position: relative;
+
+  margin: 1.4rem 0;
+
+  border: 1px solid rgba(196, 181, 253, 0.2);
+  border-radius: 1rem;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(139, 92, 246, 0.12),
+      transparent 42%
+    ),
+    rgba(6, 7, 18, 0.72);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.025),
+    0 16px 45px rgba(0, 0, 0, 0.14);
+
+  backdrop-filter: blur(14px);
+}
+
+.rigor-box::before {
+  content: "";
+
+  position: absolute;
+  inset: 0 auto 0 0;
+
+  width: 2px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(216, 180, 254, 0.9),
+      rgba(139, 92, 246, 0.55),
+      transparent
+    );
+
+  pointer-events: none;
+}
+
+.rigor-box > summary {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  gap: 0.7rem;
+
+  min-height: 3.2rem;
+
+  padding: 0.8rem 1rem;
+
+  color: rgba(238, 232, 255, 0.92);
+
+  font-size: 0.84rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+
+  cursor: pointer;
+
+  user-select: none;
+
+  list-style: none;
+
+  transition:
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.rigor-box > summary::-webkit-details-marker {
+  display: none;
+}
+
+.rigor-box > summary::before {
+  content: "∴";
+
+  display: grid;
+  place-items: center;
+
+  width: 1.7rem;
+  height: 1.7rem;
+
+  flex: 0 0 auto;
+
+  border: 1px solid rgba(196, 181, 253, 0.22);
+  border-radius: 0.5rem;
+
+  background: rgba(139, 92, 246, 0.08);
+
+  color: rgba(216, 180, 254, 0.9);
+
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.rigor-box > summary::after {
+  content: "";
+
+  width: 0.45rem;
+  height: 0.45rem;
+
+  margin-left: auto;
+
+  border-right: 1.5px solid rgba(216, 180, 254, 0.7);
+  border-bottom: 1.5px solid rgba(216, 180, 254, 0.7);
+
+  transform:
+    rotate(45deg)
+    translateY(-0.15rem);
+
+  transition:
+    transform 180ms ease;
+}
+
+.rigor-box > summary:hover {
+  background: rgba(139, 92, 246, 0.06);
+
+  color: rgba(248, 245, 255, 1);
+}
+
+.rigor-box[open] > summary {
+  border-bottom: 1px solid rgba(196, 181, 253, 0.12);
+
+  background: rgba(139, 92, 246, 0.045);
+}
+
+.rigor-box[open] > summary::after {
+  transform:
+    rotate(225deg)
+    translate(-0.1rem, -0.1rem);
+}
+
+.rigor-box-body {
+  padding: 1rem 1.1rem 1.15rem;
+
+  color: rgba(220, 225, 242, 0.86);
+
+  line-height: 1.7;
+}
+
+.rigor-box-body > :first-child {
+  margin-top: 0;
+}
+
+.rigor-box-body > :last-child {
+  margin-bottom: 0;
+}
+
+.rigor-box-body strong {
+  color: rgba(242, 238, 255, 0.96);
+}
+
+.rigor-box-body code {
+  border: 1px solid rgba(196, 181, 253, 0.14);
+  border-radius: 0.35rem;
+
+  padding: 0.08rem 0.3rem;
+
+  background: rgba(139, 92, 246, 0.07);
+
+  color: rgba(226, 216, 255, 0.95);
+}
+
+.rigor-box-body blockquote {
+  margin: 1rem 0;
+
+  border-left: 2px solid rgba(196, 181, 253, 0.35);
+
+  padding-left: 0.9rem;
+
+  color: rgba(215, 218, 238, 0.75);
+}
+
+.rigor-box-body .katex-display {
+  margin: 1.2rem 0;
+}
+
+@media (max-width: 700px) {
+  .rigor-box {
+    margin: 1.1rem 0;
+
+    border-radius: 0.85rem;
+  }
+
+  .rigor-box > summary {
+    min-height: 2.9rem;
+
+    padding: 0.7rem 0.8rem;
+
+    font-size: 0.8rem;
+  }
+
+  .rigor-box > summary::before {
+    width: 1.55rem;
+    height: 1.55rem;
+  }
+
+  .rigor-box-body {
+    padding: 0.85rem 0.9rem 1rem;
+
+    font-size: 0.94rem;
+  }
+}

@@ -1,0 +1,304 @@
+---
+title: "Can a neural network learn to fly?"
+description: "Fly a spacecraft with two controls, inspect its neural policy, and watch what reinforcement learning actually learns."
+order: 8
+
+hidden: true
+
+prerequisites:
+  - name: "Vectors and matrices"
+    href: "https://thobiashoivik.com/lab/linear-algebra-transformations/"
+    required: false
+  - name: "Some probability"
+    required: false
+  - name: "Derivatives"
+    required: false
+---
+
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BackToLab from "../../components/BackToLab.astro";
+import Prerequisites from "../../components/Prerequisites.astro";
+import RocketLab from "../../features/rocket-rl/RocketLab.tsx";
+import "../../styles/components/rigor-box.css";
+
+<BaseLayout
+  title="Can a neural network learn to fly? · Thobias Høivik"
+  description={frontmatter.description}
+>
+
+<BackToLab />
+
+<header className="page-header readable-panel">
+  <p className="eyebrow">Lab · Reinforcement learning</p>
+  <h1>Can a neural network learn to fly?</h1>
+  <p className="lead">Move the target. This little spacecraft can fire its engine and turn, but getting somewhere is easier than arriving without flying straight past it. Can a network learn the difference?</p>
+</header>
+
+
+## Preface 
+
+This is primarily for an assignment in Machine Learning Engineering, so 
+it will not be very pedagocial.
+Still, I think this is fun to play around with, so 
+maybe you'll get inspiration to learn a bit about machine learning! 
+I have linked to information about PPO (Proximal Policy Optimization), 
+which is the central method used here, so if you are interested 
+I suggest giving those resources a read. 
+
+<RocketLab client:load />
+
+
+<Prerequisites items={frontmatter.prerequisites} />
+
+<article className="prose rocket-article">
+{/*  */}
+{/* ## A small problem with an awkward constraint */}
+{/*  */}
+{/* The spacecraft cannot choose its velocity or teleport toward the cursor. */}
+{/* It can only change **thrust** and **rotation**. To move left, it may first need */}
+{/* to turn left. To stop, it may need to turn around and fire the engine again. */}
+{/*  */}
+{/* Try **Manual** mode to get a feel for this. Then switch to the learned policy, */}
+{/* move the target, and compare checkpoints. The untrained network is a real */}
+{/* initialization; it is different from the separately labelled random controller. */}
+{/*  */}
+{/* This is a machine-learning problem because the controller's weights are */}
+{/* adjusted from experience. We define the simulation and what counts as a useful */}
+{/* outcome. Training searches for a rule that produces those outcomes. */}
+{/*  */}
+{/* ## What does the agent know? */}
+{/*  */}
+{/* No images, no mouse events, and no instruction saying “turn left”. */}
+{/* The policy receives seven numbers describing the target relative to the craft, */}
+{/* its velocity, its heading, and its spin: */}
+{/*  */}
+{/* $$ */}
+{/* s_t = */}
+{/* \begin{pmatrix} */}
+{/* (g_x-x)/3 \\ */}
+{/* (g_y-y)/3 \\ */}
+{/* v_x/3 \\ */}
+{/* v_y/3 \\ */}
+{/* \sin\theta \\ */}
+{/* \cos\theta \\ */}
+{/* \omega/6 */}
+{/* \end{pmatrix}. */}
+{/* $$ */}
+{/*  */}
+{/* All entries are clipped to $[-2,2]$. The live observation display above shows */}
+{/* exactly this input, including the normalization. */}
+{/*  */}
+{/* Relative position makes the same rule useful at different places in the arena. */}
+{/* Scaling stops a large velocity from overwhelming the other inputs. */}
+{/* The pair $(\sin\theta,\cos\theta)$ avoids an artificial discontinuity: */}
+{/* $0$ and $2\pi$ point in the same direction, although their numerical angles */}
+{/* look far apart. */}
+{/*  */}
+{/* The agent does **not** receive the target's velocity. It reacts to the current */}
+{/* target position; sudden cursor movements can therefore be much harder than the */}
+{/* smooth trajectories used in evaluation. */}
+{/*  */}
+{/* ## Two numbers come out */}
+{/*  */}
+{/* The network produces a pair of bounded outputs, $(o_0,o_1)$. We convert them into */}
+{/* the engine and turning controls: */}
+{/*  */}
+{/* $$ */}
+{/* T = \frac{o_0+1}{2}, */}
+{/* \qquad */}
+{/* \tau = o_1. */}
+{/* $$ */}
+{/*  */}
+{/* Thrust $T\in[0,1]$ accelerates along the craft's nose. */}
+{/* Torque $\tau\in[-1,1]$ changes its angular velocity. */}
+{/* Turning the engine off does not instantly stop the craft. */}
+{/*  */}
+{/* ## The world underneath the animation */}
+{/*  */}
+{/* This is a deliberately simplified spacecraft: no gravity, no collisions, */}
+{/* and a little damping to make the task manageable. The simulation advances in */}
+{/* fixed steps of $\Delta t=1/30$ seconds. Its coordinates have positive $y$ upward, */}
+{/* even though the canvas draws downward. World units are labelled as simulated */}
+{/* meters. */}
+{/*  */}
+{/* The order matters. We update spin and heading first, then use the new heading */}
+{/* for acceleration: */}
+{/*  */}
+{/* $$ */}
+{/* \begin{aligned} */}
+{/* \omega_{t+1} &= 0.94\,\omega_t + 6\Delta t\,\tau_t,\\ */}
+{/* \theta_{t+1} &= \theta_t+\Delta t\,\omega_{t+1},\\ */}
+{/* v_{t+1} &= 0.99\,v_t+ */}
+{/* 4\Delta t\,T_t */}
+{/* \begin{pmatrix} */}
+{/* \cos\theta_{t+1}\\ */}
+{/* \sin\theta_{t+1} */}
+{/* \end{pmatrix},\\ */}
+{/* p_{t+1} &= p_t+\Delta t\,v_{t+1}. */}
+{/* \end{aligned} */}
+{/* $$ */}
+{/*  */}
+{/* The Python training environment and the browser implement the same equations. */}
+{/* If either coordinate exceeds five world units in magnitude, the episode ends */}
+{/* with an escape penalty. The arena is a training boundary, not a wall that */}
+{/* bounces the craft back. */}
+{/*  */}
+{/* ## What should “good flying” mean? */}
+{/*  */}
+{/* Reinforcement learning needs a **reward**: a number attached to each action's */}
+{/* consequences. This number is part of the design, not something the network */}
+{/* discovers for us. */}
+{/*  */}
+{/* Rewarding proximity alone leaves an awkward loophole. A craft can rush toward */}
+{/* the target, pass through it, and sail away. We also want it to slow down nearby. */}
+{/* On the other hand, punishing all motion would make doing nothing attractive. */}
+{/*  */}
+{/* The reward combines progress, distance, arrival speed, and small control costs. */}
+{/* Let $d=\lVert p_t-g_t\rVert$ and $d'=\lVert p_{t+1}-g_t\rVert$ be the distances */}
+{/* before and after this step, measured against the same target position. */}
+{/* Set $q=\exp(-2(d')^2)$: */}
+{/*  */}
+{/* $$ */}
+{/* \begin{aligned} */}
+{/* r_t ={}& 4(d-d')-0.10d'\\ */}
+{/* &+0.15q-0.08q\lVert v_{t+1}\rVert^2\\ */}
+{/* &-0.008T_t-0.004\tau_t^2\\ */}
+{/* &-0.002\omega_{t+1}^2. */}
+{/* \end{aligned} */}
+{/* $$ */}
+{/*  */}
+{/* The first term rewards getting closer. The second makes lingering far away */}
+{/* costly. The $q$ terms reward staying nearby at low speed. The remaining terms */}
+{/* discourage excessive thrust, turning, and spin. Escaping adds $-1$. */}
+{/*  */}
+{/* These weights encode a compromise. A policy can score better on this reward */}
+{/* without being the most pleasant controller to watch. That is why we measure */}
+{/* tracking error and compare baselines too. */}
+{/*  */}
+{/* ## What is the neural network actually doing? */}
+{/*  */}
+{/* The actor is a small multilayer perceptron: */}
+{/*  */}
+{/* $$ */}
+{/* 7\longrightarrow32\longrightarrow32\longrightarrow2. */}
+{/* $$ */}
+{/*  */}
+{/* Each hidden layer multiplies its input by a weight matrix, adds a bias, */}
+{/* and applies $\tanh$. A final linear layer produces two latent means; */}
+{/* applying $\tanh$ gives the bounded outputs used above. */}
+{/*  */}
+{/* <details className="rigor-box"> */}
+  {/* <summary>Show the entire forward pass</summary> */}
+  {/* <div className="rigor-box-body"> */}
+{/*  */}
+{/* For column-vector inputs, the deterministic policy is */}
+{/*  */}
+{/* $$ */}
+{/* \begin{aligned} */}
+{/* h_1 &= \tanh(W_1s+b_1),\\ */}
+{/* h_2 &= \tanh(W_2h_1+b_2),\\ */}
+{/* \mu &= W_3h_2+b_3,\\ */}
+{/* o &= \tanh(\mu). */}
+{/* \end{aligned} */}
+{/* $$ */}
+{/*  */}
+{/* The hidden nonlinearity lets the network represent more than one linear */}
+{/* transformation. During training, actions are sampled around the latent means */}
+{/* to explore. In the browser, we use the mean directly, so a fixed observation */}
+{/* and checkpoint always give the same controls. */}
+{/*  */}
+  {/* </div> */}
+{/* </details> */}
+{/*  */}
+{/* The weights are learned numbers, not a collection of handwritten steering */}
+{/* cases. The heuristic controller in the comparison is a separate implementation */}
+{/* with explicit position and velocity feedback. */}
+{/*  */}
+{/* ## Learning by trying things */}
+{/*  */}
+{/* There is no spreadsheet of correct thrust values. The simulator generates */}
+{/* experience: */}
+{/*  */}
+{/* $$ */}
+{/* (s_t,a_t,r_t,s_{t+1}). */}
+{/* $$ */}
+{/*  */}
+{/* We randomize initial position, velocity, heading, spin, and target. Training */}
+{/* also includes smooth moving targets. Each rollout supplies examples of what */}
+{/* happened after the current policy's actions. */}
+{/*  */}
+{/* The learning algorithm is **PPO**, implemented in NumPy for this experiment. */}
+{/* It collects rollouts and updates the actor using a clipped probability-ratio */}
+{/* objective. A separate critic estimates expected future reward; advantage */}
+{/* estimates indicate which sampled actions did better than expected. */}
+{/* Clipping discourages a single update from changing the policy too aggressively. */}
+{/* The algorithm is described in the */}
+{/* [original PPO paper](https://arxiv.org/abs/1707.06347) and */}
+{/* [OpenAI's PPO explanation](https://spinningup.openai.com/en/latest/algorithms/ppo.html). */}
+{/*  */}
+{/* The checkpoint selector and learning curve above come from saved training */}
+{/* artifacts. More steps do not guarantee that every checkpoint will behave better. */}
+{/* The visitor runs **inference**, not training: moving the cursor changes the */}
+{/* input, but never changes the saved weights. */}
+{/*  */}
+{/* ## Does it work, or does it just look convincing? */}
+{/*  */}
+{/* Cursor chasing is fun, but it is a poor controlled experiment. The evaluation */}
+{/* uses held-out seeded episodes with stationary and smooth moving targets. */}
+{/* Every controller faces the same initial conditions and target trajectories. */}
+{/* These episodes do not supply training gradients, but repeated progress checks */}
+{/* make this a validation suite rather than an untouched final test. */}
+{/*  */}
+{/* We compare learned checkpoints with an untrained policy, random controls, and */}
+{/* a handwritten feedback controller. Lower mean target distance is better; */}
+{/* return reflects our chosen reward. Mean thrust records engine use rather than */}
+{/* physical fuel consumption. */}
+{/*  */}
+{/* A “settled” episode means that, over its final 60 steps, mean distance is below */}
+{/* $0.45$ world units and mean speed is below $0.8$ units per second. It is a */}
+{/* specific test criterion, not proof that the rocket can follow any trajectory. */}
+{/* The table above reports the saved measurements rather than estimating them */}
+{/* from whatever happens to be on screen. */}
+{/* The intermediate learning-curve measurements use 32 episodes, while the */}
+{/* checkpoint comparisons use 100; small changes between them need not indicate */}
+{/* meaningful improvement. */}
+{/*  */}
+{/* In the included run, the final learned policy has slightly lower mean tracking */}
+{/* error than the feedback controller. The feedback controller uses less thrust */}
+{/* and earns higher reward. The learned policy often circles near the target */}
+{/* rather than sitting perfectly still. */}
+{/*  */}
+{/* The goal is to understand what training produced. A single training seed and */}
+{/* a simple simulator cannot establish robust real-world flight control. */}
+{/*  */}
+{/* ## From Python to your browser */}
+{/*  */}
+{/* Training exports the actor's weights, checkpoints, configuration, learning */}
+{/* curve, and evaluation into a */}
+{/* [JSON model artifact](/models/rocket-rl.json). */}
+{/* JavaScript evaluates the small network directly. No Python server or large */}
+{/* inference runtime is needed for these matrix operations. */}
+{/*  */}
+{/* First the simulator generates experience. PPO adjusts the weights from that */}
+{/* experience, Python saves them, and the browser uses them to choose controls. */}
+{/*  */}
+{/* To reproduce the experiment, use the scripts in `scripts/rocket-rl/` and the */}
+{/* instructions in `docs/rocket-rl-report.md` in the project repository. The report */}
+{/* records the experiment settings and distinguishes completed implementation */}
+{/* from the group's remaining submission work. */}
+{/*  */}
+{/* ## Sources and attribution */}
+{/*  */}
+{/* - Schulman, Wolski, Dhariwal, Radford, and Klimov (2017), */}
+  {/* [*Proximal Policy Optimization Algorithms*](https://arxiv.org/abs/1707.06347): */}
+  {/* the source of the PPO algorithm. */}
+{/* - [OpenAI Spinning Up: PPO](https://spinningup.openai.com/en/latest/algorithms/ppo.html): */}
+  {/* reference for the clipped objective, actor–critic training, and terminology. */}
+{/* - This implementation and explanatory draft were developed with **OpenAI Codex** */}
+  {/* assistance from the project brief. The physics, reward weights, interface, */}
+  {/* and evaluation protocol are project design choices rather than results */}
+  {/* claimed by those references. */}
+{/*  */}
+</article>
+
+</BaseLayout>

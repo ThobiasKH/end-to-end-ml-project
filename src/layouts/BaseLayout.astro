@@ -1,0 +1,63 @@
+---
+import "../styles/global.css";
+import Nav from "../components/layout/Nav.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "Rocket reinforcement learning: an interactive spacecraft controller and reproducible PPO experiment.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={import.meta.env.BASE_URL + "iabwd.svg"} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+    <title>{title}</title>
+
+    <script is:inline>
+      (() => {
+        const saved = localStorage.getItem("motion-preference");
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      
+        if (saved === "off" || (!saved && prefersReduced)) {
+          document.documentElement.dataset.motion = "off";
+        } else {
+          document.documentElement.dataset.motion = "on";
+        }
+      })();
+    </script>
+
+  </head>
+
+  <body>
+    <div class="animated-background" aria-hidden="true">
+      <slot name="background" />
+    </div>
+
+    <div class="site-shell">
+      <Nav />
+
+      <main class="site-main">
+        <slot />
+      </main>
+
+      <footer class="site-footer">
+        <p>© {new Date().getFullYear()} Thobias Høivik.</p>
+
+        <nav class="footer-links" aria-label="Footer links">
+          <p> thobiashoivik [at] gmail [dot] com </p>
+        </nav>
+      </footer>
+    </div>
+  </body>
+</html> 

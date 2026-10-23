@@ -1,0 +1,32 @@
+<button
+  id="motion-toggle"
+  type="button"
+  class="motion-toggle"
+  aria-label="Toggle background effects"
+>
+  Effects
+</button>
+
+<script>
+  const button = document.getElementById("motion-toggle");
+
+  function render() {
+    if (!button) return;
+
+    const motionOff = document.documentElement.dataset.motion === "off";
+    button.textContent = motionOff ? "Effects off" : "Effects on";
+    button.setAttribute("aria-pressed", String(!motionOff));
+  }
+
+  button?.addEventListener("click", () => {
+    const motionOff = document.documentElement.dataset.motion === "off";
+    const next = motionOff ? "on" : "off";
+
+    document.documentElement.dataset.motion = next;
+    localStorage.setItem("motion-preference", next);
+
+    render();
+  });
+
+  render();
+</script>

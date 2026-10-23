@@ -1,0 +1,94 @@
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.card-grid {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 720px) {
+  .card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 980px) {
+  .card-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.card {
+  display: block;
+  min-height: 12rem;
+  border: 1px solid var(--border);
+  border-radius: 1.5rem;
+  padding: 1.25rem;
+  background: rgba(17, 17, 19, 0.72);
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease,
+    background 160ms ease;
+}
+
+.card:hover {
+  border-color: #71717a;
+  transform: translateY(-2px);
+  background: rgba(24, 24, 27, 0.92);
+}
+
+.card h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.card p {
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.section {
+  margin-top: 3rem;
+}
+
+.card-prereqs {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.4rem;
+
+  margin-top: 0.8rem;
+
+  color: rgba(220, 230, 255, 0.52);
+
+  font-size: 0.72rem;
+}
+
+.prereq-dot {
+  width: 0.52rem;
+  height: 0.52rem;
+
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+}
+
+.card-prereqs.none .prereq-dot {
+  background: rgba(134, 239, 172, 0.95);
+}
+
+.card-prereqs.light .prereq-dot {
+  background: rgba(125, 211, 252, 0.95);
+}
+
+.card-prereqs.medium .prereq-dot {
+  background: rgba(196, 181, 253, 0.95);
+}
+
+.card-prereqs.heavy .prereq-dot {
+  background: rgba(244, 114, 182, 0.95);
+}

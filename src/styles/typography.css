@@ -1,0 +1,50 @@
+.eyebrow {
+  color: var(--muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.hero {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.hero h1 {
+  max-width: 52rem;
+  margin: 0;
+  font-size: clamp(2.7rem, 9vw, 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+
+.lead {
+  max-width: 44rem;
+  color: var(--muted-strong);
+  font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+  line-height: 1.75;
+}
+
+.page-header {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: clamp(2.2rem, 7vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.prose {
+  max-width: 46rem;
+  color: var(--muted-strong);
+  line-height: 1.8;
+}
+
+.prose h2 {
+  margin-top: 2rem;
+  color: var(--text);
+}

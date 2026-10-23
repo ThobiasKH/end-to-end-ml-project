@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Rocket reinforcement learning">
+  <header class="page-header readable-panel">
+    <p class="eyebrow">Machine Learning Engineering</p>
+    <h1>Rocket reinforcement learning</h1>
+    <p class="lead">
+      A small neural network controls a simulated spacecraft using thrust and
+      rotation. Move the target, compare saved checkpoints, or try flying manually.
+    </p>
+  </header>
+
+  <section class="prose" aria-labelledby="project-links">
+    <h2 id="project-links">Explore the project</h2>
+    <ul>
+      <li><a href={base + "lab/rocket-reinforcement-learning/"}>Open the rocket lab</a></li>
+      <li><a href={base + "README.md"}>Read the reproduction and deployment instructions</a></li>
+      <li><a href={base + "doc.tex"} download>Download the report source</a></li>
+      <li><a href={base + "models/rocket-rl.json"} download>Download the trained weights and results</a></li>
+    </ul>
+    <p>
+      Training runs offline in Python. The interactive lab evaluates the saved
+      policy in your browser.
+    </p>
+  </section>
+</BaseLayout>

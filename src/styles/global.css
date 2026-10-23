@@ -1,0 +1,39 @@
+@import "katex/dist/katex.min.css";
+
+@import "./tokens.css";
+@import "./base.css";
+@import "./layout.css";
+@import "./typography.css";
+@import "./components/card.css";
+@import "./components/motion-toggle.css"; 
+@import "./components/panels.css";   
+
+html {
+    overflow-x: hidden;
+}
+
+html {
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(148, 163, 184, 0.38)
+        rgba(5, 8, 20, 0.9);
+}
+
+html::-webkit-scrollbar {
+    width: 10px;
+}
+
+html::-webkit-scrollbar-track {
+    background: rgba(5, 8, 20, 0.9);
+}
+
+html::-webkit-scrollbar-thumb {
+    border: 2px solid rgba(5, 8, 20, 0.9);
+    border-radius: 999px;
+
+    background: rgba(148, 163, 184, 0.38);
+}
+
+html::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.55);
+}

@@ -1,0 +1,169 @@
+---
+type Prerequisite = {
+  name: string;
+  href?: string;
+  required?: boolean;
+};
+
+interface Props {
+  items?: Prerequisite[];
+}
+
+const { items = [] } = Astro.props;
+
+const required = items.filter((item) => item.required !== false);
+const helpful = items.filter((item) => item.required === false);
+---
+
+{items.length > 0 && (
+  <aside class="prerequisites">
+    <div class="prerequisites-heading">
+      <span class="prerequisites-icon">↳</span>
+
+      <div>
+        <p class="prerequisites-eyebrow">Before you start</p>
+        <h2>Prerequisites</h2>
+      </div>
+    </div>
+
+    {required.length > 0 && (
+      <div class="prerequisite-group">
+        <p class="prerequisite-label">Recommended</p>
+
+        <div class="prerequisite-list">
+          {required.map((item) =>
+            item.href ? (
+              <a
+                class="prerequisite-chip"
+                href={item.href}
+                target={item.href.startsWith("http") ? "_blank" : undefined}
+                rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+              >
+                {item.name}
+                <span aria-hidden="true">→</span>
+              </a>
+            ) : (
+              <span class="prerequisite-chip">
+                {item.name}
+              </span>
+            )
+          )}
+        </div>
+      </div>
+    )}
+
+    {helpful.length > 0 && (
+      <div class="prerequisite-group">
+        <p class="prerequisite-label">Helpful, but not required</p>
+
+        <div class="prerequisite-list">
+          {helpful.map((item) =>
+            item.href ? (
+              <a
+                class="prerequisite-chip optional"
+                href={item.href}
+                target={item.href.startsWith("http") ? "_blank" : undefined}
+                rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+              >
+                {item.name}
+                <span aria-hidden="true">→</span>
+              </a>
+            ) : (
+              <span class="prerequisite-chip optional">
+                {item.name}
+              </span>
+            )
+          )}
+        </div>
+      </div>
+    )}
+  </aside>
+)}
+
+<style>
+  .prerequisites {
+    margin: 1.5rem 0 2rem;
+
+    border: 1px solid rgba(170, 190, 255, 0.16);
+    border-radius: 1rem;
+
+    padding: 1rem;
+
+    background:
+      radial-gradient(
+        circle at top left,
+        rgba(90, 120, 255, 0.1),
+        transparent 38%
+      ),
+      rgba(5, 8, 18, 0.72);
+  }
+
+  .prerequisites-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .prerequisites-heading h2 {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .prerequisites-icon {
+    color: rgba(125, 211, 252, 0.9);
+    font-size: 1.25rem;
+  }
+
+  .prerequisites-eyebrow,
+  .prerequisite-label {
+    margin: 0;
+
+    color: rgba(140, 170, 255, 0.72);
+
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .prerequisite-group {
+    margin-top: 0.9rem;
+  }
+
+  .prerequisite-list {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 0.45rem;
+
+    margin-top: 0.45rem;
+  }
+
+  .prerequisite-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+
+    border: 1px solid rgba(125, 211, 252, 0.22);
+    border-radius: 999px;
+
+    padding: 0.38rem 0.6rem;
+
+    background: rgba(125, 211, 252, 0.07);
+
+    color: rgba(225, 239, 255, 0.88);
+
+    font-size: 0.82rem;
+
+    text-decoration: none;
+  }
+
+  .prerequisite-chip:hover {
+    border-color: rgba(125, 211, 252, 0.5);
+    background: rgba(125, 211, 252, 0.11);
+  }
+
+  .prerequisite-chip.optional {
+    border-color: rgba(196, 181, 253, 0.2);
+    background: rgba(196, 181, 253, 0.06);
+  }
+</style>

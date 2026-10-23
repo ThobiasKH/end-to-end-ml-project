@@ -1,0 +1,344 @@
+/* Shared visual language for the opt-in interactive labs.
+ * Import this file from each demo, then its feature stylesheet.
+ * :where() keeps defaults below feature overrides regardless of bundle order.
+ * Keep canvas drawing colors in the renderer; these tokens style the surrounding UI. */
+
+:where(.lab-demo) {
+  --lab-border-rgb: 170, 190, 255;
+  --lab-text-rgb: 220, 230, 255;
+  --lab-label-rgb: 225, 234, 255;
+  --lab-bright-rgb: 245, 248, 255;
+  --lab-cyan-rgb: 125, 211, 252;
+  --lab-lilac-rgb: 196, 181, 253;
+  --lab-blue-rgb: 59, 130, 246;
+  --lab-violet-rgb: 139, 92, 246;
+  --lab-surface-rgb: 5, 8, 18;
+  --lab-input-rgb: 10, 14, 32;
+  --lab-stage-background: #03060e;
+  --lab-card-background:
+    radial-gradient(
+      circle at top left,
+      rgba(90, 120, 255, 0.1),
+      transparent 38%
+    ),
+    rgba(var(--lab-surface-rgb), 0.72);
+  --lab-eyebrow-color: rgba(140, 170, 255, 0.78);
+  --lab-control-row-margin: 0.4rem 0 0.7rem;
+  --lab-control-row-font-size: 0.9rem;
+  --lab-slider-label-margin: 0.55rem 0;
+  --lab-note-margin: 0.75rem 0 0;
+  --lab-note-color: rgba(var(--lab-text-rgb), 0.66);
+  --lab-note-font-size: 0.86rem;
+  display: grid;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+/* Frames and control panels. */
+
+:where(.lab-demo) .lab-stage {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(var(--lab-border-rgb), 0.18);
+  border-radius: 1.25rem;
+  background: var(--lab-stage-background);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+}
+
+:where(.lab-demo) .lab-canvas {
+  display: block;
+  width: 100%;
+}
+
+:where(.lab-demo) .lab-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+:where(.lab-demo) .lab-card {
+  border: 1px solid rgba(var(--lab-border-rgb), 0.16);
+  border-radius: 1rem;
+  padding: 0.9rem;
+  background: var(--lab-card-background);
+}
+
+:where(.lab-demo) .lab-eyebrow {
+  margin: 0 0 0.7rem;
+  color: var(--lab-eyebrow-color);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+:where(.lab-demo) .lab-note {
+  margin: var(--lab-note-margin);
+  color: var(--lab-note-color);
+  font-size: var(--lab-note-font-size);
+  line-height: 1.5;
+}
+
+/* Field labels and native select. */
+
+:where(.lab-demo) .lab-control-row {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+  margin: var(--lab-control-row-margin);
+  color: rgba(var(--lab-label-rgb), 0.84);
+  font-size: var(--lab-control-row-font-size);
+}
+
+:where(.lab-demo) .lab-select-label,
+:where(.lab-demo) .lab-slider-label {
+  display: grid;
+  gap: 0.4rem;
+  color: rgba(var(--lab-label-rgb), 0.84);
+  font-size: 0.92rem;
+}
+
+:where(.lab-demo) .lab-select-label {
+  margin: 0.55rem 0;
+}
+
+:where(.lab-demo) .lab-slider-label {
+  margin: var(--lab-slider-label-margin);
+}
+
+:where(.lab-demo) .lab-select-label select {
+  width: 100%;
+  border: 1px solid rgba(var(--lab-border-rgb), 0.18);
+  border-radius: 0.75rem;
+  padding: 0.55rem 0.65rem;
+  background: rgba(var(--lab-input-rgb), 0.92);
+  color: rgba(var(--lab-bright-rgb), 0.9);
+}
+
+/* Range inputs: keep browser-specific pseudo-elements in separate rules. */
+
+:where(.lab-demo) .lab-slider {
+  width: 100%;
+  height: 1.6rem;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+:where(.lab-demo) .lab-slider:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+:where(.lab-demo) .lab-slider::-webkit-slider-runnable-track {
+  height: 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+:where(.lab-demo) .lab-slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-top: calc((0.55rem - 1.15rem) / 2);
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  background: rgba(20, 20, 24, 0.96);
+  box-shadow: 0 0 0 0.35rem rgba(var(--lab-cyan-rgb), 0.10), 0 0.45rem 1rem rgba(0, 0, 0, 0.35);
+}
+
+:where(.lab-demo) .lab-slider::-moz-range-track {
+  height: 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+:where(.lab-demo) .lab-slider::-moz-range-thumb {
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  background: rgba(20, 20, 24, 0.96);
+  box-shadow: 0 0 0 0.35rem rgba(var(--lab-cyan-rgb), 0.10), 0 0.45rem 1rem rgba(0, 0, 0, 0.35);
+}
+
+:where(.lab-demo) .lab-slider:focus-visible {
+  outline: none;
+}
+
+:where(.lab-demo) .lab-slider:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 0.35rem rgba(255, 255, 255, 0.16),
+    0 0 0 0.55rem rgba(120, 150, 255, 0.18),
+    0 0.45rem 1rem rgba(0, 0, 0, 0.35);
+}
+
+:where(.lab-demo) .lab-slider:focus-visible::-moz-range-thumb {
+  box-shadow:
+    0 0 0 0.35rem rgba(255, 255, 255, 0.16),
+    0 0 0 0.55rem rgba(120, 150, 255, 0.18),
+    0 0.45rem 1rem rgba(0, 0, 0, 0.35);
+}
+
+/* Checkboxes share the same shape; the glow is an opt-in variant. */
+
+:where(.lab-demo) .lab-checkbox {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+:where(.lab-demo) .lab-checkbox input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+:where(.lab-demo) .lab-checkmark {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: 0 0 auto;
+  border: 1px solid rgba(var(--lab-border-rgb), 0.26);
+  border-radius: 0.38rem;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0.02)
+    ),
+    rgba(var(--lab-input-rgb), 0.88);
+}
+
+:where(.lab-demo) .lab-checkmark::after {
+  content: "";
+  width: 0.46rem;
+  height: 0.26rem;
+  border-left: 2px solid rgba(var(--lab-surface-rgb), 0.95);
+  border-bottom: 2px solid rgba(var(--lab-surface-rgb), 0.95);
+  transform: rotate(-45deg) scale(0);
+}
+
+:where(.lab-demo) .lab-checkbox input:checked + .lab-checkmark {
+  border-color: rgba(var(--lab-cyan-rgb), 0.88);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(var(--lab-cyan-rgb), 0.95),
+      rgba(var(--lab-lilac-rgb), 0.92)
+    );
+}
+
+:where(.lab-demo) .lab-checkbox input:checked + .lab-checkmark::after {
+  transform: rotate(-45deg) scale(1);
+}
+
+:where(.lab-demo) .lab-checkbox input:focus-visible + .lab-checkmark {
+  outline: 2px solid rgba(var(--lab-bright-rgb), 0.9);
+  outline-offset: 3px;
+}
+
+:where(.lab-demo) .lab-checkbox--glow .lab-checkmark {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0.45rem 1rem rgba(0, 0, 0, 0.22);
+  transition:
+    border-color 150ms ease,
+    background 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+:where(.lab-demo) .lab-checkbox--glow .lab-checkmark::after {
+  transition: transform 150ms ease;
+}
+
+:where(.lab-demo) .lab-checkbox--glow:hover .lab-checkmark {
+  border-color: rgba(var(--lab-cyan-rgb), 0.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 0.28rem rgba(var(--lab-cyan-rgb), 0.08),
+    0 0.45rem 1rem rgba(0, 0, 0, 0.22);
+}
+
+:where(.lab-demo) .lab-checkbox--glow input:checked + .lab-checkmark {
+  border-color: rgba(var(--lab-cyan-rgb), 0.88);
+  background:
+    radial-gradient(
+      circle at 35% 25%,
+      rgba(255, 255, 255, 0.75),
+      transparent 22%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(var(--lab-cyan-rgb), 0.95),
+      rgba(var(--lab-lilac-rgb), 0.92)
+    );
+  box-shadow:
+    0 0 0 0.28rem rgba(var(--lab-cyan-rgb), 0.12),
+    0 0.75rem 1.4rem rgba(var(--lab-blue-rgb), 0.28);
+}
+
+:where(.lab-demo) .lab-checkbox--glow input:checked + .lab-checkmark + span {
+  color: rgba(var(--lab-bright-rgb), 0.94);
+}
+
+/* Full-width actions. Small choice/preset buttons remain feature-specific. */
+
+:where(.lab-demo) .lab-primary-button,
+:where(.lab-demo) .lab-secondary-button {
+  width: 100%;
+  border: 1px solid rgba(var(--lab-border-rgb), 0.2);
+  border-radius: 0.8rem;
+  padding: 0.65rem 0.8rem;
+  color: rgba(var(--lab-bright-rgb), 0.92);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+:where(.lab-demo) .lab-primary-button {
+  border-color: rgba(var(--lab-cyan-rgb), 0.28);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(var(--lab-blue-rgb), 0.42),
+      rgba(var(--lab-violet-rgb), 0.28)
+    );
+  color: rgba(var(--lab-bright-rgb), 0.95);
+  transition: border-color 150ms ease, background 150ms ease, opacity 150ms ease;
+}
+
+:where(.lab-demo) .lab-primary-button:hover:not(:disabled) {
+  border-color: rgba(var(--lab-cyan-rgb), 0.48);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(var(--lab-blue-rgb), 0.52),
+      rgba(var(--lab-violet-rgb), 0.36)
+    );
+}
+
+:where(.lab-demo) .lab-primary-button:disabled {
+  opacity: var(--lab-primary-disabled-opacity, 0.4);
+  cursor: not-allowed;
+}
+
+:where(.lab-demo) .lab-secondary-button {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+:where(.lab-demo) .lab-secondary-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Three-column controls become a single stack on smaller screens. */
+
+@media (max-width: 900px) {
+  :where(.lab-demo) .lab-controls {
+    grid-template-columns: 1fr;
+  }
+}

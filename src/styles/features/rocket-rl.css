@@ -1,0 +1,446 @@
+/* The shared lab stylesheet supplies panels, fields, checkboxes and actions. */
+.rocket-article .katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+
+.rocket-lab {
+  --lab-control-row-margin: 0.8rem 0 0;
+  min-width: 0;
+}
+
+.rocket-lab .lab-canvas {
+  height: clamp(350px, 52vw, 540px);
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.rocket-lab .lab-canvas:focus-visible {
+  outline: 2px solid rgba(var(--lab-cyan-rgb), 0.85);
+  outline-offset: -4px;
+  border-radius: 1.25rem;
+}
+
+.rocket-lab .rocket-stage-label {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: calc(100% - 2rem);
+  border: 1px solid rgba(var(--lab-border-rgb), 0.18);
+  border-radius: 999px;
+  padding: 0.45rem 0.7rem;
+  background: rgba(var(--lab-surface-rgb), 0.72);
+  color: rgba(var(--lab-text-rgb), 0.8);
+  font-size: 0.75rem;
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+}
+
+.rocket-lab .rocket-live-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: rgb(var(--lab-cyan-rgb));
+  box-shadow: 0 0 0.65rem rgba(var(--lab-cyan-rgb), 0.5);
+}
+
+.rocket-lab .rocket-telemetry {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+  padding: 0.2rem 0.4rem 0.5rem;
+}
+
+.rocket-lab .rocket-telemetry > div {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.rocket-lab .rocket-telemetry span,
+.rocket-lab .rocket-observations dt,
+.rocket-lab .rocket-meter-ends {
+  color: rgba(var(--lab-text-rgb), 0.52);
+  font-size: 0.74rem;
+}
+
+.rocket-lab .rocket-telemetry strong {
+  font: 600 clamp(1rem, 3vw, 1.4rem) ui-monospace, monospace;
+  color: rgba(var(--lab-bright-rgb), 0.92);
+  font-variant-numeric: tabular-nums;
+}
+
+.rocket-lab .rocket-telemetry small {
+  font-size: 0.65em;
+  font-weight: 400;
+  color: rgba(var(--lab-text-rgb), 0.55);
+}
+
+.rocket-lab .rocket-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.rocket-lab .rocket-choice {
+  border: 1px solid rgba(var(--lab-border-rgb), 0.18);
+  border-radius: 0.7rem;
+  padding: 0.5rem 0.65rem;
+  background: rgba(var(--lab-input-rgb), 0.72);
+  color: rgba(var(--lab-text-rgb), 0.74);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+
+.rocket-lab .rocket-choice:hover {
+  border-color: rgba(var(--lab-cyan-rgb), 0.48);
+  color: rgba(var(--lab-bright-rgb), 0.96);
+}
+
+.rocket-lab .rocket-choice[aria-pressed="true"] {
+  border-color: rgba(var(--lab-cyan-rgb), 0.68);
+  background: linear-gradient(135deg, rgba(var(--lab-cyan-rgb), 0.18), rgba(var(--lab-lilac-rgb), 0.15));
+  color: rgba(var(--lab-bright-rgb), 0.96);
+}
+
+.rocket-lab button:focus-visible,
+.rocket-lab .rocket-table-wrap:focus-visible {
+  outline: 2px solid rgba(var(--lab-cyan-rgb), 0.9);
+  outline-offset: 3px;
+}
+
+.rocket-lab select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rocket-lab .lab-primary-button {
+  margin-top: 0.6rem;
+}
+
+.rocket-lab .lab-secondary-button {
+  margin-top: 0.45rem;
+}
+
+.rocket-lab .rocket-action-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.7rem;
+  margin: 1.05rem 0 0.45rem;
+  color: rgba(var(--lab-label-rgb), 0.84);
+  font-size: 0.9rem;
+}
+
+.rocket-lab .rocket-action-heading strong {
+  font-family: ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.rocket-lab .rocket-thrust-meter,
+.rocket-lab .rocket-torque-meter {
+  display: block;
+  width: 100%;
+  height: 0.6rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.rocket-lab .rocket-thrust-meter::-webkit-meter-bar {
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.rocket-lab .rocket-thrust-meter::-webkit-meter-optimum-value {
+  border-radius: 999px;
+  background: rgb(var(--lab-cyan-rgb));
+}
+
+.rocket-lab .rocket-thrust-meter::-moz-meter-bar {
+  border-radius: 999px;
+  background: rgb(var(--lab-cyan-rgb));
+}
+
+.rocket-lab .rocket-torque-meter {
+  position: relative;
+}
+
+.rocket-lab .rocket-torque-meter span {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: rgb(var(--lab-lilac-rgb));
+}
+
+.rocket-lab .rocket-torque-meter i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: rgba(var(--lab-bright-rgb), 0.75);
+}
+
+.rocket-lab .rocket-meter-ends {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.45rem;
+  font-size: 0.65rem;
+}
+
+.rocket-lab .rocket-manual-controls {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  display: flex;
+  gap: 0.4rem;
+  width: max-content;
+  max-width: calc(100% - 2rem);
+  transform: translateX(-50%);
+}
+
+.rocket-lab .rocket-flight-key {
+  min-height: 44px;
+  background: rgba(var(--lab-input-rgb), 0.92);
+  touch-action: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.rocket-lab .rocket-flight-key:active {
+  border-color: rgba(var(--lab-cyan-rgb), 0.7);
+  background: rgba(var(--lab-cyan-rgb), 0.2);
+}
+
+.rocket-lab .rocket-interaction-message,
+.rocket-lab .rocket-load-error {
+  margin: 0;
+  border: 1px solid rgba(var(--lab-border-rgb), 0.12);
+  border-radius: 0.8rem;
+  padding: 0.6rem 0.75rem;
+  background: rgba(var(--lab-surface-rgb), 0.48);
+  color: rgba(var(--lab-text-rgb), 0.62);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.rocket-lab .rocket-load-error {
+  color: #fecaca;
+}
+
+.rocket-lab .rocket-inspection-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.rocket-lab h3 {
+  margin: 0 0 0.8rem;
+  color: rgba(var(--lab-bright-rgb), 0.92);
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.rocket-lab .rocket-observations {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.8rem 0.5rem;
+  margin: 1rem 0;
+}
+
+.rocket-lab .rocket-observations > div {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.rocket-lab dd {
+  margin: 0;
+  color: rgba(var(--lab-cyan-rgb), 0.9);
+  font: 600 0.87rem ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.rocket-lab .rocket-network-flow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  color: rgba(var(--lab-lilac-rgb), 0.82);
+  font-size: 0.75rem;
+}
+
+.rocket-lab .rocket-network-flow span {
+  border: 1px solid rgba(var(--lab-border-rgb), 0.14);
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.5rem;
+}
+
+.rocket-lab .rocket-reward-terms {
+  display: grid;
+  gap: 0.45rem;
+  margin: 1rem 0;
+}
+
+.rocket-lab .rocket-reward-terms > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  color: rgba(var(--lab-text-rgb), 0.65);
+  font-size: 0.82rem;
+}
+
+.rocket-lab .rocket-reward-terms dd {
+  color: rgba(var(--lab-text-rgb), 0.75);
+}
+
+.rocket-lab .rocket-positive,
+.rocket-lab .rocket-reward-terms .rocket-positive {
+  color: rgb(var(--lab-cyan-rgb));
+}
+
+.rocket-lab .rocket-results {
+  display: grid;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.rocket-lab .rocket-results > .lab-card {
+  min-width: 0;
+}
+
+.rocket-lab .rocket-chart-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.rocket-lab .rocket-chart {
+  display: block;
+  width: 100%;
+  margin-top: 0.4rem;
+  overflow: visible;
+}
+
+.rocket-lab .rocket-chart text {
+  fill: rgba(var(--lab-text-rgb), 0.6);
+  font: 11px ui-monospace, monospace;
+}
+
+.rocket-lab .rocket-chart-grid {
+  stroke: rgba(var(--lab-border-rgb), 0.1);
+}
+
+.rocket-lab .rocket-chart-selected {
+  stroke: rgba(var(--lab-lilac-rgb), 0.65);
+  stroke-dasharray: 4 5;
+}
+
+.rocket-lab .rocket-chart-line {
+  fill: none;
+  stroke: rgb(var(--lab-cyan-rgb));
+  stroke-width: 2;
+}
+
+.rocket-lab .rocket-chart-point {
+  fill: rgb(var(--lab-cyan-rgb));
+}
+
+.rocket-lab .rocket-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  margin-top: 0.8rem;
+}
+
+.rocket-lab .rocket-results-table {
+  width: 100%;
+  min-width: 35rem;
+  border-collapse: collapse;
+  color: rgba(var(--lab-text-rgb), 0.74);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.rocket-lab .rocket-results-table caption {
+  padding: 0 0 0.7rem;
+  text-align: left;
+  color: rgba(var(--lab-text-rgb), 0.5);
+  font-size: 0.75rem;
+}
+
+.rocket-lab .rocket-results-table th,
+.rocket-lab .rocket-results-table td {
+  padding: 0.7rem 0.6rem;
+  border-bottom: 1px solid rgba(var(--lab-border-rgb), 0.1);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.rocket-lab .rocket-results-table th:first-child {
+  text-align: left;
+}
+
+.rocket-lab .rocket-results-table thead {
+  color: rgba(var(--lab-text-rgb), 0.55);
+  font-size: 0.72rem;
+}
+
+.rocket-lab .rocket-current-row {
+  background: rgba(var(--lab-cyan-rgb), 0.05);
+  color: rgba(var(--lab-bright-rgb), 0.95);
+}
+
+.rocket-lab .rocket-selected-tag {
+  margin-left: 0.55rem;
+  color: rgba(var(--lab-cyan-rgb), 0.8);
+  font-size: 0.65rem;
+  font-weight: 400;
+}
+
+.rocket-lab .rocket-data-link {
+  display: inline-block;
+  margin-top: 0.8rem;
+  color: rgba(var(--lab-cyan-rgb), 0.9);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 900px) {
+  .rocket-lab .rocket-inspection-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .rocket-lab .rocket-telemetry {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .rocket-lab .rocket-observations {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .rocket-lab .rocket-chart text {
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rocket-lab .rocket-choice {
+    transition: none;
+  }
+}

@@ -1,0 +1,61 @@
+@media (max-width: 768px) {
+  .animated-background {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-background {
+    display: none;
+  }
+}
+
+html[data-motion="off"] .animated-background {
+  display: none;
+}
+
+.motion-toggle {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .motion-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+
+    padding: 0.45rem 0.8rem;
+    margin-top: 0.5rem;
+
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.72);
+
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1;
+
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+
+    transition:
+      border-color 150ms ease,
+      background 150ms ease,
+      color 150ms ease,
+      transform 150ms ease;
+  }
+
+  .motion-toggle:hover {
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    transform: translateY(-1px);
+  }
+
+  .motion-toggle:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 3px;
+  }
+}

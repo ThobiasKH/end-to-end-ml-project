@@ -1,0 +1,132 @@
+---
+const { href = import.meta.env.BASE_URL, label = "Back to project" } = Astro.props;
+---
+
+<a class="back-to-lab" href={href} aria-label={label} data-back-to-lab>
+  <span aria-hidden="true">←</span>
+  <span>{label}</span>
+</a>
+
+<script>
+  const button = document.querySelector("[data-back-to-lab]");
+
+  if (button instanceof HTMLElement) {
+    const showAt = 130;
+    const hideAfter = 220;
+
+    function setVisible(visible: boolean) {
+      button.dataset.visible = visible ? "true" : "false";
+    }
+
+    function handlePointerMove(event: PointerEvent) {
+      if (event.pointerType !== "mouse") return;
+
+      if (event.clientY <= showAt) {
+        setVisible(true);
+      } else if (event.clientY >= hideAfter) {
+        setVisible(false);
+      }
+    }
+
+    function handleFocusIn() {
+      setVisible(true);
+    }
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setVisible(false);
+      }
+    }
+
+    setVisible(false);
+
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("keydown", handleEscape);
+    button.addEventListener("focusin", handleFocusIn);
+  }
+</script>
+
+<style>
+  .back-to-lab {
+    position: fixed;
+    top: 5.25rem;
+    left: max(1rem, calc((100vw - 72rem) / 2));
+
+    z-index: 50;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+
+    width: fit-content;
+    padding: 0.5rem 0.75rem;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+
+    background: rgba(9, 9, 11, 0.68);
+    color: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(12px);
+
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+
+    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.2);
+
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-1rem);
+
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease,
+      border-color 160ms ease,
+      color 160ms ease,
+      background 160ms ease;
+  }
+
+  .back-to-lab[data-visible="true"] {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .back-to-lab:hover,
+  .back-to-lab:focus-visible {
+    transform: translateY(0) translateX(-0.15rem);
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(20, 20, 24, 0.82);
+    color: white;
+  }
+
+  .back-to-lab span:first-child {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  @media (max-width: 760px) {
+    .back-to-lab {
+      top: auto;
+      right: 1rem;
+      bottom: 1rem;
+      left: auto;
+
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+    }
+
+    .back-to-lab:hover,
+    .back-to-lab:focus-visible {
+      transform: translateX(-0.15rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .back-to-lab {
+      transition: none;
+    }
+  }
+</style>
